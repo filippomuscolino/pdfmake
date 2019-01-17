@@ -1,6 +1,6 @@
 import TextDecorator from './TextDecorator';
 import TextInlines from './TextInlines';
-import { isUndefined } from './helpers/variableType';
+import {isUndefined} from './helpers/variableType';
 
 class Renderer {
 	constructor(pdfDocument, progressCallback) {
@@ -59,7 +59,7 @@ class Renderer {
 	}
 
 	renderLine(line, x, y) {
-		function preparePageNodeRefLine(_pageNodeRef, inline) {
+		function prepareRefLine(_pageNodeRef, inline, text) {
 			let newWidth;
 			let diffWidth;
 			let textInlines = new TextInlines(null);
@@ -70,9 +70,8 @@ class Renderer {
 
 			let pageNumber = _pageNodeRef.positions[0].pageNumber.toString();
 
-			inline.text = pageNumber;
 			inline.linkToPage = pageNumber;
-			newWidth = textInlines.widthOfText(inline.text, inline);
+			newWidth = textInlines.widthOfText(text, inline);
 			diffWidth = inline.width - newWidth;
 			inline.width = newWidth;
 
@@ -86,8 +85,21 @@ class Renderer {
 			}
 		}
 
+		function preparePageNodeRefLine(_pageNodeRef, inline) {
+			inline.text = _pageNodeRef.positions[0].pageNumber.toString();
+			prepareRefLine(_pageNodeRef, inline, inline.text);
+		}
+
+		function preparePageNodeTextRefLine(_pageNodeTextRef, inline) {
+			prepareRefLine(_pageNodeRef, inline, _pageNodeTextRef.text);
+		}
+
 		if (line._pageNodeRef) {
 			preparePageNodeRefLine(line._pageNodeRef, line.inlines[0]);
+		}
+
+		if (line._pageNodeTextRef) {
+			preparePageNodeTextRefLine(line._pageNodeTextRef, line.inlines[0]);
 		}
 
 		x = x || 0;

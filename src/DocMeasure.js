@@ -222,10 +222,14 @@ class DocMeasure {
 			let item = node.toc._items[i];
 			let lineStyle = item._textNodeRef.tocStyle || textStyle;
 			let lineMargin = item._textNodeRef.tocMargin || textMargin;
-			body.push([
-				{ text: item._textNodeRef.text, alignment: 'left', style: lineStyle, margin: lineMargin },
-				{ text: '00000', alignment: 'right', _tocItemRef: item._nodeRef, style: numberStyle, margin: [0, lineMargin[1], 0, lineMargin[3]] }
-			]);
+			let tocTextRef = item._textNodeRef.tocTextRef || false;
+            let tocText = {text: item._textNodeRef.text, alignment: 'left', style: lineStyle, margin: lineMargin};
+            if (tocTextRef) {
+                tocText._tocItemTextRef = item._nodeRef;
+            }
+            body.push([tocText,
+                {text: '00000', alignment: 'right', _tocItemRef: item._nodeRef, style: numberStyle, margin: [0, lineMargin[1], 0, lineMargin[3]]}]
+            );
 		}
 
 		node.toc._table = {
@@ -719,7 +723,7 @@ class DocMeasure {
 			for (let i = 0, l = node.table.widths.length; i < l; i++) {
 				let w = node.table.widths[i];
 				if (isNumber(w) || isString(w)) {
-					node.table.widths[i] = { width: w };
+					node.table.widths[i] = {width: w};
 				}
 			}
 		}

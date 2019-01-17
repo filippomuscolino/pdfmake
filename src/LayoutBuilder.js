@@ -577,6 +577,10 @@ class LayoutBuilder {
 			line._pageNodeRef = node._pageRef._nodeRef;
 		}
 
+		if (node._tocItemTextRef) {
+			line._pageNodeTextRef = node._tocItemTextRef;
+		}
+
 		if (line && line.inlines && isArray(line.inlines)) {
 			for (let i = 0, l = line.inlines.length; i < l; i++) {
 				if (line.inlines[i]._tocItemRef) {
