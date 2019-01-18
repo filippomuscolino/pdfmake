@@ -91,7 +91,7 @@ class Renderer {
 		}
 
 		function preparePageNodeTextRefLine(_pageNodeTextRef, inline) {
-			prepareRefLine(_pageNodeRef, inline, _pageNodeTextRef.text);
+			prepareRefLine(_pageNodeTextRef, inline, _pageNodeTextRef.text);
 		}
 
 		if (line._pageNodeRef) {
